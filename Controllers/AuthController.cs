@@ -15,7 +15,7 @@ public class AuthController : ControllerBase
         => Ok(await _auth.LoginAsync(req));
 
     [HttpPost("register")]
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public async Task<IActionResult> Register(RegisterRequest req)
     {
         await _auth.RegisterAsync(req);

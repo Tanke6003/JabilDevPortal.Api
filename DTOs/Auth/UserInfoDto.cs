@@ -7,6 +7,8 @@ namespace JabilDevPortal.Api.DTOs.Auth
         public string FullName   { get; set; } = null!;
         public string Email      { get; set; } = null!;
         public string Department { get; set; } = null!;
-        public string Role       { get; set; } = null!;
+       public int    RoleId   { get; set; }
+public string RoleName { get; set; } = null!;
+
     }
 }

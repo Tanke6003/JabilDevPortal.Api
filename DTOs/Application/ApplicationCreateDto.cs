@@ -1,19 +1,13 @@
-// DTOs/Application/ApplicationCreateDto.cs
-namespace JabilDevPortal.Api.DTOs.Application
+public class ApplicationCreateDto
 {
-    public class ApplicationCreateDto
-    {
-        public string Name        { get; set; } = null!;
-        public string Url         { get; set; } = null!;
-        public string Description { get; set; } = null!;   // ← nuevo
-        
-        public string DbServer { get; set; } = null!;
-        public string DbName      { get; set; } = null!;
-        public string RepoUrl     { get; set; } = null!;
-        public string Version     { get; set; } = null!;
-        public int    OwnerUserId { get; set; }
-        public int    SmeUserId   { get; set; }
-        public string SupportEmail{ get; set; } = null!;
-        public string Department  { get; set; } = null!;
-    }
+    public string Name { get; set; } = null!;
+    public string? Description { get; set; }
+    public string? Url { get; set; }
+    public string? Server { get; set; }
+    public string? Repository { get; set; }
+    public int? OwnerId { get; set; }
+    public string SupportEmail { get; set; } = null!;
+    public string? SmeEmail { get; set; }
+    public string? DbServer { get; set; }
+    public bool Available { get; set; } = true;
 }

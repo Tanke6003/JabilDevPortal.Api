@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using BackEnd.Infrastructure.Plugins;
+using JabilDevPortal.Api.Data.Models.Config;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(options =>
@@ -19,9 +21,6 @@ builder.Services.AddCors(options =>
     });
 });
 
-// 1. DbContext
-builder.Services.AddDbContext<ApplicationDbContext>(opt =>
-    opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // 2. JWT settings
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
@@ -29,6 +28,15 @@ var jwt = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
 
 // 3. Servicios de autenticación
 builder.Services.AddScoped<IAuthService, AuthService>();
+
+builder.Services.AddScoped< PGSQLConnectionPlugin>(provider => new PGSQLConnectionPlugin(new SQLDataBaseSettings()
+{
+    Database = "JabilDevPortal",
+    Server = "18.226.200.67",
+    Password = "TuPssw0rdFuerte!",
+    User = "sa"
+}));
+
 
 // 4. Añade controllers (¡IMPRESCINDIBLE!)
 builder.Services.AddControllers();
@@ -56,6 +64,8 @@ builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 // 7. Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
