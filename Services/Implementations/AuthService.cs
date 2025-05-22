@@ -33,7 +33,7 @@ namespace JabilDevPortal.Api.Services.Implementations
         var row = dt.Rows[0];
         var hashedPassword = row["password"].ToString();
         if (string.IsNullOrEmpty(hashedPassword) || !BCryptNet.Verify(request.Password, hashedPassword))
-            throw new UnauthorizedAccessException("Usuario o contraseña incorrectos");
+            throw new UnauthorizedAccessException("Usuario o contrase    incorrectos");
 
         var userId = Convert.ToInt32(row["id"]);
         var userName = row["name"].ToString();
@@ -43,7 +43,7 @@ namespace JabilDevPortal.Api.Services.Implementations
         {
             new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
             new Claim(JwtRegisteredClaimNames.UniqueName, userName),
-            new Claim(ClaimTypes.Role, roleId)
+            new Claim(JwtRegisteredClaimNames.Typ, roleId)
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwt.Secret));

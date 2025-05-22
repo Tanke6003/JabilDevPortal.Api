@@ -14,16 +14,11 @@ public class ApplicationService : IApplicationService
         _db = db;
     }
 
-    public async Task<List<ApplicationReadDto>> GetAllAsync(string? department, int? ownerId)
+    public async Task<List<ApplicationReadDto>> GetAllAsync()
     {
         // Si no tienes campo Department, omite ese filtro
         var sql = "SELECT * FROM applications WHERE 1=1";
-        if (ownerId.HasValue)
-            sql += $" AND owner_id = {ownerId.Value}";
-
-        // TODO: Si tienes el campo 'department' en la tabla, descomenta esto
-        // if (!string.IsNullOrEmpty(department))
-        //     sql += $" AND department = '{department.Replace("'", "''")}'";
+    
 
         var dt = await Task.Run(() => _db.ExecDataTable(sql));
         return dt.Rows.Cast<DataRow>().Select(MapToReadDto).ToList();
@@ -75,10 +70,12 @@ public class ApplicationService : IApplicationService
                 owner_id = {(dto.OwnerId.HasValue ? dto.OwnerId.Value.ToString() : "NULL")},
                 support_email = '{dto.SupportEmail.Replace("'", "''")}',
                 sme_email = {(dto.SmeEmail == null ? "NULL" : $"'{dto.SmeEmail.Replace("'", "''")}'")},
-                db_server = {(dto.DbServer == null ? "NULL" : $"'{dto.DbServer.Replace("'", "''")}'")}
+                db_server = {(dto.DbServer == null ? "NULL" : $"'{dto.DbServer.Replace("'", "''")}'")},
+                available = {(dto.Available ? "true" : "false")}
             WHERE id = {id};
         ";
-        await Task.Run(() => _db.ExecNonQuery(sql));
+        
+            await Task.Run(() => _db.ExecDataTable(sql));
     }
 
     public async Task DeleteAsync(int id)

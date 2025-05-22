@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
-[Route("api/applications")]
+[Route("applications")]
 
 public class ApplicationsController : ControllerBase
 {
@@ -12,15 +12,14 @@ public class ApplicationsController : ControllerBase
     public ApplicationsController(IApplicationService svc) => _svc = svc;
 
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] string? department, [FromQuery] int? ownerId)
-        => Ok(await _svc.GetAllAsync(department, ownerId));
+    public async Task<IActionResult> GetAll()
+        => Ok(await _svc.GetAllAsync());
 
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(int id)
         => Ok(await _svc.GetByIdAsync(id));
 
     [HttpPost]
-    [Authorize(Roles = "Developer,Admin")]
     public async Task<IActionResult> Create(ApplicationCreateDto dto)
     {
         var id = await _svc.CreateAsync(dto);
@@ -28,7 +27,6 @@ public class ApplicationsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [Authorize(Roles = "Developer,Admin")]
     public async Task<IActionResult> Update(int id, ApplicationCreateDto dto)
     {
         await _svc.UpdateAsync(id, dto);
@@ -36,7 +34,6 @@ public class ApplicationsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(int id)
     {
         await _svc.DeleteAsync(id);

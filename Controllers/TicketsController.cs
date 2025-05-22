@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
-[Route("api/tickets")]
-[Authorize]
+[Route("tickets")]
+
 public class TicketsController : ControllerBase
 {
     private readonly ITicketService _tickets;
