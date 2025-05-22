@@ -10,16 +10,7 @@ using BackEnd.Infrastructure.Plugins;
 using JabilDevPortal.Api.Data.Models.Config;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AngularDevPolicy", policy =>
-    {
-        policy
-          .AllowAnyOrigin()  // URL de tu front-end
-          .AllowAnyHeader()
-          .AllowAnyMethod();
-    });
-});
+builder.Services.AddCors(options => { options.AddDefaultPolicy(builder => { builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); }); });
 
 
 // 2. JWT settings
@@ -86,8 +77,9 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = "swagger";
 });
 
-// 3) Usa CORS **antes** de autenticación/autorización
-app.UseCors("AngularDevPolicy");
+app.UseCors(
+                options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+            ); // Habilita CORS con la política predeterminada
 
 app.UseAuthentication();
 app.UseAuthorization();

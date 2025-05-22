@@ -17,7 +17,7 @@ public class ApplicationService : IApplicationService
     public async Task<List<ApplicationReadDto>> GetAllAsync()
     {
         // Si no tienes campo Department, omite ese filtro
-        var sql = "SELECT * FROM applications WHERE 1=1";
+        var sql = "SELECT * FROM applications order by id";
     
 
         var dt = await Task.Run(() => _db.ExecDataTable(sql));

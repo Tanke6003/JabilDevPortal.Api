@@ -9,5 +9,6 @@ namespace JabilDevPortal.Api.Services.Interfaces
         Task<List<TicketReadDto>> GetAllAsync(int? appId, string? status);
         Task<TicketReadDto> GetByIdAsync(int id);
         Task UpdateStatusAsync(int id, string status);
+        Task<List<TicketReadDto>> GetMyTickets(int userId);
     }
 }

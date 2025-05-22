@@ -37,7 +37,7 @@ public class TicketService : ITicketService
         var dt = await Task.Run(() => _db.ExecDataTable(sql));
         return dt.Rows.Count > 0 ? Convert.ToInt32(dt.Rows[0]["id"]) : 0;
     }
-
+    
     public async Task<List<TicketReadDto>> GetAllAsync(int? appId, string? status)
     {
         var sql = "SELECT * FROM tickets WHERE available = true";
@@ -58,6 +58,21 @@ public class TicketService : ITicketService
         return MapToReadDto(dt.Rows[0]);
     }
 
+   public async Task<List<TicketReadDto>> GetMyTickets(int userId)
+{
+    // Construir la consulta SQL para traer los tickets creados o asignados a este usuario
+    var sql = $@"
+        SELECT * 
+        FROM tickets 
+        WHERE available = true 
+        AND (created_by_id = {userId} OR assigned_to_id = {userId});
+    ";
+
+    // Ejecutar la consulta y mapear los resultados
+    var dt = await Task.Run(() => _db.ExecDataTable(sql));
+    return dt.Rows.Cast<DataRow>().Select(MapToReadDto).ToList();
+}
+
     public async Task UpdateStatusAsync(int id, string status)
     {
         // Solo actualiza el campo status
@@ -71,7 +86,7 @@ public class TicketService : ITicketService
                 updated_at = NOW()
             WHERE id = {id};
         ";
-        await Task.Run(() => _db.ExecNonQuery(sql));
+        await Task.Run(() => _db.ExecDataTable(sql));
     }
 
     private TicketReadDto MapToReadDto(DataRow row)

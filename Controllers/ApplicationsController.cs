@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
-[Route("applications")]
+[Route("api/applications")]
 
 public class ApplicationsController : ControllerBase
 {

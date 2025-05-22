@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/tickets/{ticketId}/comments")]
-[Authorize]
 public class TicketCommentsController : ControllerBase
 {
     private readonly ICommentService _comments;

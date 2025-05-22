@@ -1,11 +1,12 @@
 
+using System.Security.Cryptography;
 using JabilDevPortal.Api.DTOs.Ticket;
 using JabilDevPortal.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
-[Route("tickets")]
+[Route("api/tickets")]
 
 public class TicketsController : ControllerBase
 {
@@ -20,11 +21,11 @@ public class TicketsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery]int? appId, [FromQuery]string? status)
+    public async Task<IActionResult> GetAll([FromQuery] int? appId, [FromQuery] string? status)
         => Ok(await _tickets.GetAllAsync(appId, status));
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> Get(int id) 
+    public async Task<IActionResult> Get(int id)
         => Ok(await _tickets.GetByIdAsync(id));
 
     [HttpPut("{id}/status")]
@@ -32,5 +33,18 @@ public class TicketsController : ControllerBase
     {
         await _tickets.UpdateStatusAsync(id, dto.Status);
         return NoContent();
+    }
+    [HttpGet("my-tickets")]
+    public async Task<IActionResult> GetMyTickets(int userId)
+    {
+        try
+        {
+            return Ok(await _tickets.GetMyTickets(userId));
+        }
+        catch (Exception ex)
+        {
+
+            return StatusCode(500, ex.Message);
+        }
     }
 }
