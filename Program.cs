@@ -74,17 +74,28 @@ builder.Services.AddSwaggerGen();
 // 8. Autorización
 builder.Services.AddAuthorization();
 
+
 var app = builder.Build();
+app.UseRouting();
 
 // 9. Middleware
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1");
+    c.RoutePrefix = "swagger";
+});
 
 // 3) Usa CORS **antes** de autenticación/autorización
 app.UseCors("AngularDevPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();
+// después de app.UseAuthorization();
+
+app.MapGet("/api/health", () => Results.Ok(new { status = "OK" }))
+   .AllowAnonymous();
+
 
 // 10. Rutas de controllers
 app.MapControllers();
